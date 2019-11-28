@@ -1,3 +1,5 @@
+const utils = require('./utils')
+
 class Player {
     
     constructor({name, attack, defense, hp, mp, spells}) {
@@ -10,6 +12,16 @@ class Player {
         this.max_mp = mp;
         this.mp = mp;
         this.spells = spells;
+    }
+
+    attack() {
+        return utils.random(this.heavy_attack, this.light_attack);
+    }
+
+    get_hurts(damage_point) {
+        this.hp -= (damage_point - this.defense);
+
+        return this;
     }
 
 }
