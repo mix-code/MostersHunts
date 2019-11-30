@@ -1,3 +1,4 @@
+const readline = require('readline-sync');
 const utils = require('./utils')
 
 class Player {
@@ -22,6 +23,16 @@ class Player {
         this.hp -= (damage_point - this.defense);
 
         return this;
+    }
+
+    show_main_menu() {
+        return readline.keyInSelect(['Attack', 'Magic'], 'Choose An Option: ');
+    }
+
+    show_spells_menu() {        
+        const spells = this.spells.map(spell => `${spell.name} (${spell.type}) (${spell.cost})`);
+
+        return readline.keyInSelect(spells, "Choose A Spell: ");
     }
 
 }

@@ -1,0 +1,24 @@
+{
+  "name": "mosterhunt",
+  "version": "1.0.0",
+  "description": "A CLI Game Using NodeJS",
+  "main": "play.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "GIT",
+    "NodeJS",
+    "Node",
+    "Js",
+    "CLI",
+    "CMD",
+    "Game"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
