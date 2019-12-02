@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const { Player } = require('./game/Player');
 const { Magic } = require('./game/Magic');
 
@@ -25,23 +26,56 @@ while(gameRunning) {
 
     // Player Turn
     console.log("==================================\n");
-    console.log('Player Main Menu');
+    console.log(chalk.blue('Player Main Menu'));
 
     let player_select = player.show_main_menu();
-    console.log("\n");
     
     if (player_select === 0) {        
         attack_damage = player.attack();
         monster.get_hurts(attack_damage);
         
-        console.log(`Player Attacked By ${attack_damage}`);
-        console.log(`Monster HP Is ${monster.hp}\n`);
+        console.log(chalk.green(`${chalk.bold(`Player Attacked`)} By ${attack_damage} Points`));
+        console.log(chalk.blue(`Monster HP Is ${monster.hp} Points\n `));
     } else if (player_select === 1) {
         // Spells Menu
+        console.log("==================================\n");
+
+        console.log(chalk.blue(`Magic Spells Menu`));
+        console.log(chalk.yellow(`Player MP Is: ${player.mp}/${player.max_mp}`));
+
         let player_spell_select = player.show_spells_menu();
-        console.log(player_spell_select);
+        const spell = player.spells[player_spell_select];
         
-        // PLayer Attack Or Heal
+        if (player.mp >= spell.cost) {
+            player.use_magic(spell.cost);
+            
+            // PLayer Attack Or Heal
+            if (spell.type === 'attack') { // Attack Type
+                attack_damage = spell.attack();
+                monster.get_hurts(attack_damage);
+    
+                console.log(chalk.green(`Player Used ${chalk.bold(`${spell.name}`)} and attacked monster by ${attack_damage} Points\n`));
+                console.log(chalk.blue(`Monster HP Is ${monster.hp} Points\n `));
+            } else if (spell.type === 'heal') { // Heal Type
+                player.heal(spell.effect_points);
+    
+                let message = '';
+                
+                if (spell.effect_points === null) {
+                    message = `Player Used ${chalk.bold(`${spell.name}`)} and fully restored HP\n`;
+                } else {
+                    message = `Player Used ${chalk.bold(`${spell.name}`)} and healed by ${spell.effect_points} Points\n`;
+                }
+    
+                console.log(chalk.green(message));
+            }
+            
+        } else {
+            console.log(chalk.bold(chalk.red('No Enough MP\n')));
+        }
+        
+        
+
         // Monster get Hurts if player attack
     }
     
@@ -53,17 +87,18 @@ while(gameRunning) {
     attack_damage = monster.attack();
     player.get_hurts(attack_damage);
 
-    console.log(`Monster Attacked By ${attack_damage}`);
-    console.log(`Player HP Is ${player.hp}\n`);
+    console.log(chalk.red(`${chalk.bold(`Monster Attacked`)} By ${attack_damage} Points`));
+    console.log(chalk.blue(`Player HP Is ${player.hp} Points\n`));
 
 
     // Game End
     if (player.hp > monster.hp && monster.hp <= 0) {
-        console.log('You Win!');
+        console.log(chalk.bold(chalk.green('You Win!')));
         gameRunning = false;
         
     } else if (monster.hp > player.hp && player.hp <= 0) {
-        console.log('You Lose!');
+        console.log(chalk.bold(chalk.red('You Lose!')));
         gameRunning = false;
     }
 }
+
