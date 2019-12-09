@@ -71,7 +71,7 @@ class Player {
             mp_bar_color = 'yellow';
         }
 
-        console.log(`${chalk.blue(`${this.name}`)}          |${chalk[hp_bar_color](`${hp_bar}`)}| ${this.hp}/${this.max_hp}          |${chalk[mp_bar_color](`${mp_bar}`)}| ${this.mp}/${this.max_mp}`);
+        console.log(`${chalk.blue(`${this.name}`)}          |${chalk[hp_bar_color](`${hp_bar}`)}| ${this.hp}/${this.max_hp} HP          |${chalk[mp_bar_color](`${mp_bar}`)}| ${this.mp}/${this.max_mp} MP`);
         
     }
 
