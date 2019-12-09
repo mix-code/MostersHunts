@@ -1,7 +1,9 @@
 const chalk = require('chalk');
 const log = require('./game/logger');
-const { Player } = require('./game/Player');
+const utils = require('./game/utils');
+const { Player, Monster } = require('./game/Player');
 const { Magic } = require('./game/Magic');
+
 
 // Player Magic Spells Setup
 const playerSpells = [
@@ -17,12 +19,13 @@ const playerSpells = [
 const player = new Player({name: 'Player1', attack: 500, defense: 100, hp: 1000, mp: 500, spells: playerSpells});
 
 // Monster Setup
-const monster = new Player({name: 'Monster1', attack: 700, defense: 150, hp: 2000, mp: 1000, spells: []});
+const monster = new Monster({name: 'Monster1', attack: 700, defense: 150, hp: 2000, mp: 1000, spells: playerSpells});
 
 // Game Start
 let gameRunning = true;
 
-while(gameRunning) { 
+while(gameRunning) {
+
     let attack_damage = 0;
 
     player.show_statistics();
@@ -84,13 +87,55 @@ while(gameRunning) {
     // ==================================
 
     console.log("==================================\n");
-    
-    // Monster Turn
-    attack_damage = monster.attack();
-    player.get_hurts(attack_damage);
 
-    log.toMonster(`${chalk.bold(`Monster Attacked`)} By ${attack_damage} Points`);
-    log.toSystem(`Player HP Is ${player.hp} Points\n`);
+    let monster_menu_select = utils.random(2, 1);
+   
+    if (monster.mp <= 0) {
+        monster_menu_select = 1
+    }
+
+    // Attack
+    if (monster_menu_select === 1) {        
+        // Monster Turn
+        attack_damage = monster.attack();
+        player.get_hurts(attack_damage);
+
+        log.toMonster(`${chalk.bold(`Monster Attacked`)} By ${attack_damage} Points`);
+        log.toSystem(`Player HP Is ${player.hp} Points\n`);    
+    
+    } else if (monster_menu_select === 2) {
+        let monster_spell_select = utils.random(5, 0);        
+        const spell = monster.spells[monster_spell_select];
+        
+        if (monster.mp >= spell.cost) {
+            monster.use_magic(spell.cost);
+            
+            // Monster Attack Or Heal
+            if (spell.type === 'attack') { // Attack Type
+                attack_damage = spell.attack();
+                player.get_hurts(attack_damage);
+    
+                log.toMonster(`Monster Used ${chalk.bold(`${spell.name}`)} and attacked Player by ${attack_damage} Points\n`);
+                log.toSystem(`Player HP Is ${player.hp} Points\n `);
+            } else if (spell.type === 'heal') { // Heal Type
+                monster.heal(spell.effect_points);
+    
+                let message = '';
+                
+                if (spell.effect_points === null) {
+                    message = `Monster Used ${chalk.bold(`${spell.name}`)} and fully restored HP\n`;
+                } else {
+                    message = `Monster Used ${chalk.bold(`${spell.name}`)} and healed by ${spell.effect_points} Points\n`;
+                }
+    
+                log.toMonster(message);
+            }
+            
+        } else {
+            log.toMonster(chalk.bold('No Enough MP\n'));
+        }
+    }
+    
 
 
     // Game End

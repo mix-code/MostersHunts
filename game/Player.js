@@ -99,4 +99,11 @@ class Player {
 
 }
 
-module.exports = { Player };
+class Monster extends Player {
+    constructor({name, attack, defense, hp, mp, spells}) {
+        super({name, attack, defense, hp, mp, spells});
+    }
+}
+
+
+module.exports = { Player, Monster };
