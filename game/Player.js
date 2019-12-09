@@ -53,6 +53,50 @@ class Player {
         return readline.keyInSelect(spells, chalk.blue("Choose A Spell: "));
     }
 
+    show_statistics() {        
+        let hp_bar = this._calculate_statistics(this.hp, this.max_hp, 50);
+        let mp_bar = this._calculate_statistics(this.mp, this.max_mp, 30);
+
+        let hp_bar_color = 'green';
+        let mp_bar_color = 'cyan';
+
+        let half_hp_bar = 50 / 2;
+        let half_mp_bar = 30 / 2;
+
+        if (hp_bar.trim().length < half_hp_bar) {
+            hp_bar_color = 'red';
+        }
+
+        if (mp_bar.trim().length < half_mp_bar) {
+            mp_bar_color = 'yellow';
+        }
+
+        console.log(`${chalk.blue(`${this.name}`)}          |${chalk[hp_bar_color](`${hp_bar}`)}| ${this.hp}/${this.max_hp}          |${chalk[mp_bar_color](`${mp_bar}`)}| ${this.mp}/${this.max_mp}`);
+        
+    }
+
+    _calculate_statistics(current_points, total_points, bar_length) {
+        let bar_tick = '';
+        let empty_bar_tick = '';
+
+        // HP Percentage
+        let hp_percentage = current_points * 100 / total_points;
+
+        // bar ticks
+        let ticks = Math.floor(bar_length * (hp_percentage / 100)) 
+        let empty_ticks = bar_length - ticks;
+
+        for(let i = 0; i < ticks; i++) {
+            bar_tick += '\u2588';
+        }
+
+        for(let i = 0; i < empty_ticks; i++) {
+            empty_bar_tick += ' ';
+        }
+
+        return bar_tick + empty_bar_tick;
+    }
+
 }
 
 module.exports = { Player };

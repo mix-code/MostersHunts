@@ -24,8 +24,12 @@ let gameRunning = true;
 while(gameRunning) { 
     let attack_damage = 0;
 
+    player.show_statistics();
+    console.log('\n');
+    monster.show_statistics();
+
     // Player Turn
-    console.log("==================================\n");
+    console.log("\n==================================\n");
     console.log(chalk.blue('Player Main Menu'));
 
     let player_select = player.show_main_menu();
