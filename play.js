@@ -4,6 +4,25 @@ const utils = require('./game/utils');
 const { Player, Monster } = require('./game/Player');
 const { Magic } = require('./game/Magic');
 
+const argv = require('yargs')
+    .usage(chalk.green(`Play Our CLI Game and Have Fun By ${chalk.bold(chalk.cyan('MixCode'))}.`))
+    .option('player-name', {
+        description: 'Player Name',
+        type: 'string',
+        default: '[Player]',
+    })
+    .option('monster-name', {
+        description: 'Monster Name',
+        type: 'string',
+        default: '[Monster]',
+    })
+    .version('v1.0.0')
+    .alias('h', 'help')
+    .alias('v', 'version')
+    .alias('p', 'player-name')
+    .alias('m', 'monster-name')
+    .argv;
+
 
 // Player Magic Spells Setup
 const playerSpells = [
@@ -16,10 +35,10 @@ const playerSpells = [
 ];
 
 // Player Setup
-const player = new Player({name: 'Player1', attack: 500, defense: 100, hp: 1000, mp: 500, spells: playerSpells});
+const player = new Player({name: argv.playerName, attack: 500, defense: 100, hp: 12000, mp: 10000, spells: playerSpells});
 
 // Monster Setup
-const monster = new Monster({name: 'Monster1', attack: 700, defense: 150, hp: 2000, mp: 1000, spells: playerSpells});
+const monster = new Monster({name: argv.monsterName, attack: 700, defense: 150, hp: 20000, mp: 14000, spells: playerSpells});
 
 // Game Start
 let gameRunning = true;
